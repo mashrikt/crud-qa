@@ -4,7 +4,7 @@ Testing a CRUD API with pytest.
 
 
 ## Requirements
-
+Python 3
 Virtualenv
 
 
