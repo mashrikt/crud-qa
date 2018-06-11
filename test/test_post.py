@@ -42,6 +42,16 @@ class TestEmployeeCreate(object):
         employee_dict['salary'] = -100
         response = requests.post(url=list_create_url, json=employee_dict)
         assert response.status_code == 400
+
+    def test_negative_salary_not_create_user(self, list_create_url, employee_dict):
+        """
+        if negative salary entered, user should not be created
+        :param list_create_url:
+        :param employee_dict:
+        :return:
+        """
+        employee_dict['salary'] = -100
+        response = requests.post(url=list_create_url, json=employee_dict)
         response2 = requests.get(url=list_create_url)
         # FIXME hack required since age is a string field
         employee_dict['age'] = str(employee_dict['age'])
@@ -57,30 +67,80 @@ class TestEmployeeCreate(object):
         employee_dict['age'] = -100
         response = requests.post(url=list_create_url, json=employee_dict)
         assert response.status_code == 400
+
+    def test_negative_age_not_create_user(self, list_create_url, employee_dict):
+        """
+        should not accept negative salary
+        :param list_create_url:
+        :param employee_dict:
+        :return:
+        """
+        employee_dict['age'] = -100
+        response = requests.post(url=list_create_url, json=employee_dict)
         response2 = requests.get(url=list_create_url)
         # FIXME hack required since age is a string field
         employee_dict['age'] = str(employee_dict['age'])
         assert employee_dict not in response2.json()
 
-    def test_employee_str_for_int_fields(self, list_create_url, employee_dict):
+    def test_employee_str_for_salary_field(self, list_create_url, employee_dict):
         """
         using string for int fields(salary, age) should result in failure
         :param list_create_url:
         :param employee_dict:
         :return:
         """
-        fields = ['salary', 'age']
-        for field in fields:
-            new_dict = employee_dict
-            new_dict[field] = randint(1, 10)
-            response = requests.post(url=list_create_url, json=new_dict)
-            print(field)
-            assert response.status_code == 400
-            # user should not be created either
-            response2 = requests.get(url=list_create_url)
-            # FIXME hack required since age is a string field
-            new_dict['age'] = str(new_dict['age'])
-            assert new_dict not in response2.json()
+        new_dict = employee_dict
+        new_dict['salary'] = randint(1, 10)
+        response = requests.post(url=list_create_url, json=new_dict)
+        print('salary')
+        assert response.status_code == 400
+
+    def test_employee_str_for_salary_field_not_create_user(self, list_create_url, employee_dict):
+        """
+        using string for int fields(salary, age) should result in failure
+        :param list_create_url:
+        :param employee_dict:
+        :return:
+        """
+        new_dict = employee_dict
+        new_dict['salary'] = randint(1, 10)
+        response = requests.post(url=list_create_url, json=new_dict)
+        print('salary')
+        # user should not be created either
+        response2 = requests.get(url=list_create_url)
+        # FIXME hack required since age is a string field
+        new_dict['age'] = str(new_dict['age'])
+        assert new_dict not in response2.json()
+
+    def test_employee_str_for_age_field(self, list_create_url, employee_dict):
+        """
+        using string for age should result in failure
+        :param list_create_url:
+        :param employee_dict:
+        :return:
+        """
+        new_dict = employee_dict
+        new_dict['age'] = randint(1, 10)
+        response = requests.post(url=list_create_url, json=new_dict)
+        print('age')
+        assert response.status_code == 400
+
+    def test_employee_str_for_age_field_not_create_user(self, list_create_url, employee_dict):
+        """
+        using string for age should result in failure
+        :param list_create_url:
+        :param employee_dict:
+        :return:
+        """
+        new_dict = employee_dict
+        new_dict['age'] = randint(1, 10)
+        response = requests.post(url=list_create_url, json=new_dict)
+        print('age')
+        # user should not be created either
+        response2 = requests.get(url=list_create_url)
+        # FIXME hack required since age is a string field
+        new_dict['age'] = str(new_dict['age'])
+        assert new_dict not in response2.json()
 
     def test_employee_int_for_str_fields(self, list_create_url, employee_dict):
         """
